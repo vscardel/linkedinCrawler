@@ -20,6 +20,7 @@ class Crawler:
         self.request_session = requests.Session()
         chrome_options.add_argument(
             f'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
+        chrome_options.add_argument('--headless')
         self.DRIVER = selenium.webdriver.Chrome(
             executable_path=os.getenv('EXECUTABLE_PATH'), options=chrome_options)
 

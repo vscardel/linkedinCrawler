@@ -1,5 +1,6 @@
 import time
 import requests
+import logging
 from typing import List, Dict, Any
 
 # type definitions
@@ -8,10 +9,14 @@ cookies = List[cookie]
 
 # this function logs into linkedin with the credentials passed and return
 # the session cookies to further use
+
+
 def login(username: str, password: str, DRIVER: Any) -> cookies:
     url_login = 'https://www.linkedin.com/checkpoint/lg/sign-in-another-account'
+    logging.info("get on linkedin")
     DRIVER.get(url_login)
     time.sleep(1)
+    logging.info("executing js for login")
     DRIVER.execute_script(
         f'document.querySelector("#username").value = "{username}"')
     DRIVER.execute_script(
@@ -20,6 +25,7 @@ def login(username: str, password: str, DRIVER: Any) -> cookies:
         'document.querySelector("#organic-div > form > div.login__form_action_container > button").click()')
     current_url = DRIVER.current_url
     if 'manage-account' in current_url:
+        logging.info("entered on special manage-account case")
         DRIVER.execute_script(
             'document.querySelector("#ember20 > button.primary-action-new").click()')
         current_url = DRIVER.current_url
