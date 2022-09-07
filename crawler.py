@@ -1,9 +1,8 @@
 
 import selenium.webdriver
 import requests
-import login
 import os
-from login import cookies, transfer_cookies_to_request
+import login
 from typing import Any
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
@@ -28,7 +27,7 @@ class Crawler:
     def login(self, username: str, password: str, DRIVER: Any) -> bool:
         cookie_list: cookies = login.login(username, password, DRIVER)
         if cookie_list:
-            transfer_cookies_to_request(self.request_session, cookie_list)
+            login.transfer_cookies_to_request(self.request_session, cookie_list)
             return True
         else:
             False

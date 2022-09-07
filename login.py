@@ -2,6 +2,7 @@ import time
 import requests
 import logging
 from typing import List, Dict, Any
+from settings import Settings
 
 # type definitions
 cookie = Dict[str, str]
@@ -12,7 +13,7 @@ cookies = List[cookie]
 
 
 def login(username: str, password: str, DRIVER: Any) -> cookies:
-    url_login = 'https://www.linkedin.com/checkpoint/lg/sign-in-another-account'
+    url_login = Settings.URLS['URL_LOGIN']
     logging.info("get on linkedin")
     DRIVER.get(url_login)
     time.sleep(1)
