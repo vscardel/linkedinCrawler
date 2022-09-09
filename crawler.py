@@ -12,9 +12,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-jobs = List[str]
-Batch = List[jobs]
-
 #12 is the number of new jobs loaded after scrolling down
 def calculate_number_of_scroll_downs(number_of_jobs:int) -> int:
     num_jobs = 0
@@ -34,7 +31,7 @@ class Crawler:
         self.request_session = requests.Session()
         chrome_options.add_argument(
             f'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
-        # chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--headless')
         self.DRIVER = selenium.webdriver.Chrome(
             executable_path=os.getenv('EXECUTABLE_PATH'), options=chrome_options)
 
@@ -78,18 +75,5 @@ class Crawler:
                     href_list.append(complete_url)
         return href_list
             
-    #returns a list of job contents in the form
-    #of html strings
-    def get_job_batch(self,batch_size:int) -> jobs:
-        pass
-    
-    def print_job_batch(self,job_batch:Batch) -> None:
-        if job_batch:
-            for job_content in job_batch:
-                soup = BeautifulSoup(job_content, 'html.parser')
-                print(soup.prettify())
-        else:
-            print('Empty job batch')
-        
     def __exit__(self):
         self.DRIVER.quit()
