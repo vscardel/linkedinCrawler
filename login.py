@@ -14,10 +14,10 @@ cookies = List[cookie]
 
 def login(username: str, password: str, DRIVER: Any) -> cookies:
     url_login = Settings.URLS['URL_LOGIN']
-    logging.info("get on linkedin")
+    print("get on linkedin")
     DRIVER.get(url_login)
     time.sleep(1)
-    logging.info("executing js for login")
+    print("executing js for login")
     DRIVER.execute_script(
         f'document.querySelector("#username").value = "{username}"')
     DRIVER.execute_script(
@@ -26,7 +26,7 @@ def login(username: str, password: str, DRIVER: Any) -> cookies:
         'document.querySelector("#organic-div > form > div.login__form_action_container > button").click()')
     current_url = DRIVER.current_url
     if 'manage-account' in current_url:
-        logging.info("entered on special manage-account case")
+        print("entered on special manage-account case")
         DRIVER.execute_script(
             'document.querySelector("#ember20 > button.primary-action-new").click()')
         current_url = DRIVER.current_url

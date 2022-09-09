@@ -3,12 +3,27 @@ import selenium.webdriver
 import requests
 import os
 import login
-from typing import Any
+import time
+from typing import Any, List
 from selenium.webdriver.chrome.options import Options
+from settings import Settings
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv()
 
+jobs = List[str]
+Batch = List[jobs]
+
+#12 is the number of new jobs loaded after scrolling down
+def calculate_number_of_scroll_downs(number_of_jobs:int) -> int:
+    num_jobs = 0
+    num_scroll_downs = 0
+    while num_jobs <= number_of_jobs:
+        num_jobs += 12
+        num_scroll_downs += 1
+    return num_scroll_downs
+    
 class Crawler:
 
     def __init__(self) -> None:
@@ -19,7 +34,7 @@ class Crawler:
         self.request_session = requests.Session()
         chrome_options.add_argument(
             f'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
-        chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('--headless')
         self.DRIVER = selenium.webdriver.Chrome(
             executable_path=os.getenv('EXECUTABLE_PATH'), options=chrome_options)
 
@@ -31,6 +46,50 @@ class Crawler:
             return True
         else:
             False
+            
+    #scroll down the page the necessary number of times
+    #to reveal all jobs urls
+    def load_all_jobs(self,num_jobs:int) -> None:
+        self.DRIVER.get(Settings.URLS['URL_JOBS'])
+        #wait screen to load
+        time.sleep(2)
+        #each screen loading load 12 new jobs, so
+        #i can calculate the number of screen downs
+        #i need to take
+        num_scroll_downs = calculate_number_of_scroll_downs(num_jobs)
+        for count in range(0,num_scroll_downs):
+            #20000 is a big enough number to scroll all the way down
+            self.DRIVER.execute_script('window.scrollTo(0, 20000)')
+            time.sleep(1)
+        
+    #extract all the urls from the scrolled down page 
+    def get_all_jobs_urls(self) -> List[str]:
+        page_html = self.DRIVER.page_source
+        soup = BeautifulSoup(page_html, 'html.parser')
+        all_html_links = soup.find_all('a')
+        href_list = []
+        for link in all_html_links:
+            link_href = link.get('href')
+            if 'JobId' in link_href:
+                #take garbage out of the url splitting on '&' and taking the first part
+                clean_url = link_href.split('&')[0]
+                complete_url = Settings.URLS['LINKEDIN_DOMAIN'] + clean_url
+                if complete_url not in href_list:
+                    href_list.append(complete_url)
+        return href_list
+            
+    #returns a list of job contents in the form
+    #of html strings
+    def get_job_batch(self,batch_size:int) -> jobs:
+        pass
     
+    def print_job_batch(self,job_batch:Batch) -> None:
+        if job_batch:
+            for job_content in job_batch:
+                soup = BeautifulSoup(job_content, 'html.parser')
+                print(soup.prettify())
+        else:
+            print('Empty job batch')
+        
     def __exit__(self):
         self.DRIVER.quit()
