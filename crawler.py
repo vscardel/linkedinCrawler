@@ -4,7 +4,7 @@ import requests
 import os
 import login
 import time
-from typing import Any, List
+from typing import Any
 from selenium.webdriver.chrome.options import Options
 from settings import Settings
 from bs4 import BeautifulSoup
@@ -60,7 +60,7 @@ class Crawler:
             time.sleep(1)
         
     #extract all the urls from the scrolled down page 
-    def get_all_jobs_urls(self) -> List[str]:
+    def get_all_jobs_urls(self) -> list[str]:
         page_html = self.DRIVER.page_source
         soup = BeautifulSoup(page_html, 'html.parser')
         all_html_links = soup.find_all('a')
@@ -74,6 +74,17 @@ class Crawler:
                 if complete_url not in href_list:
                     href_list.append(complete_url)
         return href_list
-            
+
+    def extract_html_from_jobs_url(self,job_urls:list[str]) -> list[str]:
+            html_content_list = []
+            for url in job_urls:
+                html_content = self.request_session.get(url)
+                html_content_list.append(html_content)
+            return html_content_list
+    
+    def extract_content_from_html(self,html_content: str) -> dict:
+        soup = BeautifulSoup(html_content, 'html.parser')
+        pass
+
     def __exit__(self):
         self.DRIVER.quit()

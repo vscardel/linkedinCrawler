@@ -26,8 +26,9 @@ class Testclass:
     
     def test_db_connection(self):
         mySql = Mysql()
+        jobId = mySql.generate_random_id()
         mock_job = {
-            "ID": 0,
+            "ID": jobId,
             "CompanyName": "Amazon",
             "ApplicantExperience":"Senior",
             "Domain": "Web Development",
@@ -41,6 +42,6 @@ class Testclass:
             "Salary": 5000.37
         }
         mySql.insert_job_into_database(mock_job)
-        job = mySql.retrieve_job_from_database(jobId = 0)
-        mySql.delete_job_from_database(jobId = 0)
+        job = mySql.retrieve_job_from_database(jobId = jobId)
+        mySql.delete_job_from_database(jobId = jobId)
         assert job
