@@ -26,6 +26,7 @@ class Mysql:
         VALUES(
             {ID},
             '{CompanyName}',
+            '{CompanyLink}',
             '{ApplicantExperience}',
             '{Domain}',
             '{CompanyService}',
@@ -40,6 +41,7 @@ class Mysql:
         '''.format(
             ID=job['ID'],
             CompanyName=job['CompanyName'],
+            CompanyLink=job['CompanyLink'],
             ApplicantExperience=job['ApplicantExperience'],
             Domain=job['Domain'],
             CompanyService=job['CompanyService'],

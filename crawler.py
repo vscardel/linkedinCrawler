@@ -8,6 +8,7 @@ from typing import Any
 from selenium.webdriver.chrome.options import Options
 from settings import Settings
 from bs4 import BeautifulSoup
+from extraction_rules import *
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -75,16 +76,26 @@ class Crawler:
                     href_list.append(complete_url)
         return href_list
 
-    def extract_html_from_jobs_url(self,job_urls:list[str]) -> list[str]:
+    def extract_html_from_jobs_urls(self,job_urls:list[str]) -> list[str]:
             html_content_list = []
             for url in job_urls:
-                html_content = self.request_session.get(url)
-                html_content_list.append(html_content)
+                try:
+                    self.DRIVER.get(url)
+                    #wait for the page to load
+                    time.sleep(3)
+                    html_content_list.append(self.DRIVER.page_source)
+                except Exception as e:
+                    print(e)
             return html_content_list
     
     def extract_content_from_html(self,html_content: str) -> dict:
+        content_dict = {}
         soup = BeautifulSoup(html_content, 'html.parser')
-        pass
+        company_name_and_link_tuple = extract_company_name_and_url(soup)
+        content_dict['CompanyName'] = company_name_and_link_tuple[0]
+        content_dict['companyLink'] = company_name_and_link_tuple[1]
+        return content_dict
+        
 
     def __exit__(self):
         self.DRIVER.quit()

@@ -33,6 +33,7 @@ class Testclass:
             "ApplicantExperience":"Senior",
             "Domain": "Web Development",
             "CompanyService": "Sales",
+            "CompanyLink": "https://www.uol.com.br",
             "Modality": "In Person",
             "ProgrammingLanguage": "Python, C# and Javascript",
             "Framework":"React",
