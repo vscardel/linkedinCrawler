@@ -31,6 +31,7 @@ class Testclass:
             "ID": jobId,
             "CompanyName": "Amazon",
             "ApplicantExperience":"Senior",
+            "JobTitle":"Software Engineer",
             "Domain": "Web Development",
             "CompanyService": "Sales",
             "CompanyLink": "https://www.uol.com.br",

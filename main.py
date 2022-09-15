@@ -1,9 +1,11 @@
 import logging
 import time
 from crawler import Crawler
+from db import Mysql
 from dotenv import dotenv_values
 
 if __name__ == '__main__':
+    
     config = dotenv_values(".env")
     username = config['USERNAME']
     password = config['PASSWORD']
