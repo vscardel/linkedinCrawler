@@ -94,6 +94,7 @@ class Crawler:
         company_name_and_link_tuple = extract_company_name_and_url(soup)
         content_dict['CompanyName'] = company_name_and_link_tuple[0]
         content_dict['companyLink'] = company_name_and_link_tuple[1]
+        content_dict['JobTitle'] = extract_job_title(soup)
         return content_dict
         
 

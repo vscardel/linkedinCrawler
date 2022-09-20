@@ -14,4 +14,9 @@ def extract_company_name_and_url(soup:Any) -> tuple[str,str]:
     company_name = str(company_info_tag.string).strip()
     company_link = Settings.URLS['LINKEDIN_DOMAIN'] +  company_info_tag['href']
     return (company_name,company_link)
+
+def extract_job_title(soup:Any) -> str:
+    tag_company_title = soup.find("h2","t-24 t-bold jobs-unified-top-card__job-title")
+    company_title = str(tag_company_title.string.strip())
+    return company_title
     
