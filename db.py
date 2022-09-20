@@ -45,13 +45,27 @@ class Mysql:
 
     def insert_job_into_database(self, job: dict) -> None:
         insert_query = '''
-        INSERT INTO Jobs
+        INSERT INTO Jobs (
+            ID, 
+            JobTitle, 
+            CompanyName, 
+            CompanyLink, 
+            ApplicantExperience, 
+            Domain, 
+            CompanyService, 
+            Modality, 
+            ProgrammingLanguage, 
+            Framework,
+            VirtualizationTech,
+            DataBaseTech,
+            CreationDate,
+            Salary
+        )
         VALUES(
             {ID},
+            '{JobTitle}',
             '{CompanyName}',
             '{CompanyLink}',
-            '{CompanyLink}',
-            '{JobTitle}'
             '{ApplicantExperience}',
             '{Domain}',
             '{CompanyService}',
@@ -65,9 +79,9 @@ class Mysql:
         );
         '''.format(
             ID=job['ID'],
+            JobTitle=job['JobTitle'],
             CompanyName=job['CompanyName'],
             CompanyLink=job['CompanyLink'],
-            JobTitle=job['JobTitle'],
             ApplicantExperience=job['ApplicantExperience'],
             Domain=job['Domain'],
             CompanyService=job['CompanyService'],
@@ -79,6 +93,7 @@ class Mysql:
             CreationDate=job['CreationDate'],
             Salary=job['Salary']
         )
+        print(insert_query)
         self.cursor.execute(insert_query)
         self.conn.commit()
 
@@ -92,10 +107,6 @@ class Mysql:
         delete_query = f"DELETE FROM Jobs WHERE ID = {jobId};"
         self.cursor.execute(delete_query)
         self.conn.commit()
-
-    def insert_job_batch(self, job_batch: List[Dict]) -> None:
-        for job in job_batch:
-            self.insert_job_into_database(job)
 
     def generate_random_id(self) -> int:
         # generate random 64 bit integer

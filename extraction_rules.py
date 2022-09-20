@@ -4,7 +4,7 @@ from settings import Settings
 
 def remove_whitespaces(string:str) -> str:
     string.remove('\n')
-
+    
 def extract_company_name_and_url(soup:Any) -> tuple[str,str]:
     #only one tag with this class name
     tag_unified_job_title = soup.find("span", class_="jobs-unified-top-card__company-name")
@@ -15,4 +15,3 @@ def extract_company_name_and_url(soup:Any) -> tuple[str,str]:
     company_link = Settings.URLS['LINKEDIN_DOMAIN'] +  company_info_tag['href']
     return (company_name,company_link)
     
-
