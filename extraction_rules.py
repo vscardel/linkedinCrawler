@@ -1,3 +1,4 @@
+from this import s
 from typing import Any
 from bs4 import BeautifulSoup
 from settings import Settings
@@ -44,13 +45,41 @@ def extract_applicant_experience(soup: Any, jobTitle) -> str:
 
 
 def extract_domain(soup: Any, jobTitle: str) -> str:
-    #this list can and will get more complete
+    # this list can and will get more complete
     keywords = ['backend', 'back-end', 'frontend', 'front-end']
     for keyword in keywords:
         if keyword in jobTitle:
-            if keyword in ['backend','back-end']:
+            if keyword in ['backend', 'back-end']:
                 return 'Web Back-End'
             else:
                 return 'Web Front-End'
-    #default return
+    # default return
     return "Software Engineering"
+
+
+# two options, make an NLP approach or have a table
+# for companies with their services, for now i will
+# let this incomplete
+def extrac_company_service(soup: Any) -> None:
+    return None
+
+def extract_job_location(soup: Any) -> str:
+    tag_location = soup.find(
+        "span", class_="jobs-unified-top-card__bullet")
+    return str(tag_location.string).strip()
+
+#TODO implement this
+def extract_job_description(soup: Any) -> str:
+    return ""
+
+def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
+    #some jobs have a tag indicating its modality, but not all
+        tag_modality = soup.find(
+        "span", class_="jobs-unified-top-card__workplace-type")
+        if tag_modality:
+            return str(tag_modality.string.strip())
+        else:
+            if 'remoto' in jobTitle.lower() or 'remoto' in jobDescription.lower():
+                return 'Remoto'
+            else:
+                return 'Presecial'

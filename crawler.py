@@ -103,6 +103,10 @@ class Crawler:
             soup, content_dict['JobTitle'].lower())
         content_dict['Domain'] = extract_domain(
             soup, content_dict['JobTitle'].lower())
+        content_dict['CompanyService'] = extrac_company_service(soup)
+        content_dict['Location'] = extract_job_location(soup)
+        content_dict['Description'] = extract_job_description(soup)
+        content_dict['Modality'] = extract_modality(soup,content_dict['JobTitle'],content_dict['Description'])
         return content_dict
 
     def __exit__(self):
