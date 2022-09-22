@@ -1,6 +1,6 @@
 from this import s
 from typing import Any
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup,NavigableString
 from settings import Settings
 
 
@@ -63,23 +63,46 @@ def extract_domain(soup: Any, jobTitle: str) -> str:
 def extrac_company_service(soup: Any) -> None:
     return None
 
+
 def extract_job_location(soup: Any) -> str:
     tag_location = soup.find(
         "span", class_="jobs-unified-top-card__bullet")
     return str(tag_location.string).strip()
 
-#TODO implement this
+
 def extract_job_description(soup: Any) -> str:
-    return ""
+    print('extraindo conteudo')
+    tag_job_details = soup.find(
+        "div", class_="jobs-box__html-content jobs-description-content__text t-14 t-normal jobs-description-content__text--stretch")
+    # bad trick to not raise a "x has no attribute exception"
+    span_tag = None
+    for content in tag_job_details.contents:
+        try:
+            if content.name == 'span' and content.contents:
+                span_tag = content
+        except:
+            pass
+    if span_tag:
+        description = ''
+        for content in span_tag.contents:
+            content_text = content.string
+            if (content.name == 'p' or isinstance(content_text,NavigableString)) and content_text:
+                description += content_text
+            elif content.name == 'ul':
+                for li in content.contents:
+                    description += f"{li.string}"
+        
+    return description
+
 
 def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
-    #some jobs have a tag indicating its modality, but not all
-        tag_modality = soup.find(
+    # some jobs have a tag indicating its modality, but not all
+    tag_modality = soup.find(
         "span", class_="jobs-unified-top-card__workplace-type")
-        if tag_modality:
-            return str(tag_modality.string.strip())
+    if tag_modality:
+        return str(tag_modality.string.strip())
+    else:
+        if 'remoto' in jobTitle.lower() or 'remoto' in jobDescription.lower():
+            return 'Remoto'
         else:
-            if 'remoto' in jobTitle.lower() or 'remoto' in jobDescription.lower():
-                return 'Remoto'
-            else:
-                return 'Presecial'
+            return 'Presencial'

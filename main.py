@@ -11,7 +11,7 @@ if __name__ == '__main__':
     password = config['PASSWORD']
     crawler = Crawler()
     is_logged = crawler.login(username, password, crawler.DRIVER)
-    batch_size = 2
+    batch_size = 10
     crawler.load_all_jobs(batch_size)
     time.sleep(2)
     job_urls = crawler.get_all_jobs_urls()
