@@ -118,6 +118,7 @@ class Crawler:
         content_dict['Location'] = extract_job_location(soup)
         content_dict['Description'] = extract_job_description(soup)
         content_dict['Modality'] = extract_modality(soup,content_dict['JobTitle'],content_dict['Description'])
+        content_dict['ProgrammingLanguage'] = extract_programming_language(content_dict['JobTitle'],content_dict['Description'])
         return content_dict
 
     def __exit__(self):

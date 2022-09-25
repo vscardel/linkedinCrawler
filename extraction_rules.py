@@ -95,6 +95,8 @@ def extract_job_description(soup: Any) -> str:
     return description
 
 
+#the programming languages are going to be stored as a string
+#where each programming language is separated by a comma
 def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
     # some jobs have a tag indicating its modality, but not all
     tag_modality = soup.find(
@@ -106,3 +108,14 @@ def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
             return 'Remoto'
         else:
             return 'Presencial'
+
+#programming languages are stored as a string with the PL separated by
+#a comma
+def extract_programming_language(jobTitle:str, jobDescription:str) -> str:
+    programming_languages_string = ''
+    for programming_language in Settings.PROGRAMMING_LANGUAGES:
+        if programming_language in jobTitle.lower() or programming_language in jobDescription.lower():
+            programming_languages_string += f'{programming_language},'
+    #take out the last comma
+    programming_languages_string = programming_languages_string[:-1]
+    return programming_languages_string

@@ -5,3 +5,26 @@ class Settings:
         "LINKEDIN_DOMAIN":"https://www.linkedin.com"
     }
     
+    #in lowercase for normalization
+    PROGRAMMING_LANGUAGES = [
+        'python',
+        'java',
+        'c#',
+        'c++',
+        'c/c++',
+        'php',
+        'rust',
+        'ruby on rails',
+        'ruby',
+        'golang',
+        'flutter',
+        'javascript',
+        'typescript',
+        'swift',
+        'kotlin',
+        'julia',
+        'matlab',
+        'dart',
+        'scala',
+        'haskell'
+    ]
