@@ -119,3 +119,11 @@ def extract_programming_language(jobTitle:str, jobDescription:str) -> str:
     #take out the last comma
     programming_languages_string = programming_languages_string[:-1]
     return programming_languages_string
+
+def extract_framework(jobDescription:str) -> str:
+    framework_string = ''
+    for framework in Settings.FRAMEWORKS:
+        if framework in jobDescription.lower():
+            framework_string += f'{framework},'
+    framework_string = framework_string[:-1]
+    return framework_string

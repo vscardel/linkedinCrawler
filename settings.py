@@ -14,7 +14,6 @@ class Settings:
         'c/c++',
         'php',
         'rust',
-        'ruby on rails',
         'ruby',
         'golang',
         'flutter',
@@ -27,4 +26,22 @@ class Settings:
         'dart',
         'scala',
         'haskell'
+    ]
+    
+    FRAMEWORKS = [
+        'node.js',
+        'react.js',
+        'node',
+        'react',
+        'jquery',
+        'express',
+        'angular',
+        'vue.js',
+        'vue',
+        'asp.net',
+        'django',
+        'flask',
+        'laravel',
+        'next.js',
+        'fastapi'
     ]
