@@ -127,3 +127,11 @@ def extract_framework(jobDescription:str) -> str:
             framework_string += f'{framework},'
     framework_string = framework_string[:-1]
     return framework_string
+
+def extract_virtualization(jobDescription:str) -> str:
+    virtualization_tech_string = ''
+    for v_tech in Settings.VIRTUALIZATION:
+        if v_tech in jobDescription.lower():
+            virtualization_tech_string += f'{v_tech},'
+    virtualization_tech_string = virtualization_tech_string[:-1]
+    return virtualization_tech_string

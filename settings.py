@@ -45,3 +45,13 @@ class Settings:
         'next.js',
         'fastapi'
     ]
+    
+    VIRTUALIZATION = [
+        'docker',
+        'aws',
+        'ci/cd',
+        'container',
+        'containers',
+        'amazon web services',
+        'cloud'
+    ]
