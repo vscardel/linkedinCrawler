@@ -119,9 +119,10 @@ class Crawler:
         content_dict['Description'] = extract_job_description(soup)
         content_dict['Modality'] = extract_modality(soup,content_dict['JobTitle'],content_dict['Description'])
         content_dict['ProgrammingLanguage'] = extract_programming_language(content_dict['JobTitle'],content_dict['Description'])
-        content_dict['Framework'] = extract_framework(content_dict['Description'])
-        content_dict['VirtualizationTech'] = extract_virtualization(content_dict['Description'])
-        content_dict['DataBaseTech'] = extract_database_tech(content_dict['Description'])
+        frameworks,v_tech,d_tech = extract_description_content(content_dict['Description'])
+        content_dict['Framework'] = frameworks
+        content_dict['VirtualizationTech'] = v_tech
+        content_dict['DataBaseTech'] = d_tech
         return content_dict
 
     def __exit__(self):

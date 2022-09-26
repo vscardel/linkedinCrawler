@@ -1,5 +1,5 @@
 from this import s
-from typing import Any
+from typing import Any,Tuple
 from bs4 import BeautifulSoup,NavigableString
 from settings import Settings
 
@@ -120,26 +120,22 @@ def extract_programming_language(jobTitle:str, jobDescription:str) -> str:
     programming_languages_string = programming_languages_string[:-1]
     return programming_languages_string
 
-def extract_framework(jobDescription:str) -> str:
+def extract_description_content(jobDescription:str) -> Tuple[str,str,str]:
     framework_string = ''
-    for framework in Settings.FRAMEWORKS:
-        if framework in jobDescription.lower():
-            framework_string += f'{framework},'
-    framework_string = framework_string[:-1]
-    return framework_string
-
-def extract_virtualization(jobDescription:str) -> str:
     virtualization_tech_string = ''
-    for v_tech in Settings.VIRTUALIZATION:
-        if v_tech in jobDescription.lower():
-            virtualization_tech_string += f'{v_tech},'
-    virtualization_tech_string = virtualization_tech_string[:-1]
-    return virtualization_tech_string
-
-def extract_database_tech(jobDescription:str) -> str:
     database_tech_string = ''
+    normalized_job_description = jobDescription.lower()
+    for framework in Settings.FRAMEWORKS:
+        if framework in normalized_job_description:
+            framework_string += f'{framework},'
+    for v_tech in Settings.VIRTUALIZATION:
+        if v_tech in normalized_job_description:
+            virtualization_tech_string += f'{v_tech},'
     for d_tech in Settings.DATABASES:
-        if d_tech in jobDescription.lower():
+        if d_tech in normalized_job_description:
             database_tech_string += f'{d_tech},'
+    #take last comma out of the string
+    framework_string = framework_string[:-1]
+    virtualization_tech_string = virtualization_tech_string[:-1]
     database_tech_string = database_tech_string[:-1]
-    return database_tech_string
+    return framework_string,virtualization_tech_string,database_tech_string
