@@ -55,3 +55,21 @@ class Settings:
         'amazon web services',
         'cloud'
     ]
+    
+    DATABASES = [
+        'mongodb',
+        'mysql',
+        'redis',
+        'oracle',
+        'microsoft sql server',
+        'postgresql',
+        'elasticsearch',
+        'sqlite',
+        'ibm db2',
+        'cassandra',
+        'microsoft access',
+        'mariadb',
+        'dynamo db',
+        'splunk',
+        'snowflake'
+    ]

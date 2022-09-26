@@ -135,3 +135,11 @@ def extract_virtualization(jobDescription:str) -> str:
             virtualization_tech_string += f'{v_tech},'
     virtualization_tech_string = virtualization_tech_string[:-1]
     return virtualization_tech_string
+
+def extract_database_tech(jobDescription:str) -> str:
+    database_tech_string = ''
+    for d_tech in Settings.DATABASES:
+        if d_tech in jobDescription.lower():
+            database_tech_string += f'{d_tech},'
+    database_tech_string = database_tech_string[:-1]
+    return database_tech_string
