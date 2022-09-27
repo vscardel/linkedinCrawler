@@ -1,6 +1,6 @@
 from this import s
 from typing import Any,Tuple
-from bs4 import BeautifulSoup,NavigableString
+from bs4 import BeautifulSoup,NavigableString,element
 from settings import Settings
 
 
@@ -139,3 +139,19 @@ def extract_description_content(jobDescription:str) -> Tuple[str,str,str]:
     virtualization_tech_string = virtualization_tech_string[:-1]
     database_tech_string = database_tech_string[:-1]
     return framework_string,virtualization_tech_string,database_tech_string
+
+def extract_date(soup:Any) -> str:
+    date_tag = soup.find("time")
+    return str(date_tag['datetime'])
+
+def extract_salary(soup:Any) -> str:
+    tag_salary = soup.find("div", id="SALARY")
+    salary_tag = None
+    for content in tag_salary.contents:
+        if isinstance(content,element.Tag):
+            salary_tag = content
+    if salary_tag:
+        return str(salary_tag.string).strip()
+    else:
+        return "A combinar"
+    

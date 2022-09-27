@@ -123,6 +123,8 @@ class Crawler:
         content_dict['Framework'] = frameworks
         content_dict['VirtualizationTech'] = v_tech
         content_dict['DataBaseTech'] = d_tech
+        content_dict['CreationDate'] = extract_date(soup)
+        content_dict['Salary'] = extract_salary(soup)
         return content_dict
 
     def __exit__(self):
