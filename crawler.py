@@ -108,7 +108,7 @@ class Crawler:
         soup = BeautifulSoup(html_content, 'html.parser')
         company_name_and_link_tuple = extract_company_name_and_url(soup)
         content_dict['CompanyName'] = company_name_and_link_tuple[0]
-        content_dict['companyLink'] = company_name_and_link_tuple[1]
+        content_dict['CompanyLink'] = company_name_and_link_tuple[1]
         content_dict['JobTitle'] = extract_job_title(soup)
         content_dict['ApplicantExperience'] = extract_applicant_experience(
             soup, content_dict['JobTitle'].lower())

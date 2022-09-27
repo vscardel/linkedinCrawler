@@ -34,6 +34,8 @@ class Testclass:
             "JobTitle":"Software Engineer",
             "ApplicantExperience":"Senior",
             "Domain": "Web Development",
+            "Location":"Brasil",
+            "Description":"bla bla bla",
             "CompanyService": "Sales",
             "Modality": "In Person",
             "ProgrammingLanguage": "Python, C# and Javascript",
@@ -41,7 +43,7 @@ class Testclass:
             "VirtualizationTech": "Docker",
             "DataBaseTech": "Relational Databases",
             "CreationDate": "2022-09-08",
-            "Salary": 5000.37
+            "Salary": '5000.37'
         }
         mySql.insert_job_into_database(mock_job)
         job = mySql.retrieve_job_from_database(jobId = jobId)

@@ -32,14 +32,14 @@ class Mysql:
             Domain varchar(255),
             CompanyService varchar(255),
             Location varchar(255),
-            Description varchar(10000),
+            Description text(100000),
             Modality varchar(255),
             ProgrammingLanguage varchar(255),
             Framework varchar(255),
             VirtualizationTech varchar(255),
             DataBaseTech varchar(255),
             CreationDate DATE,
-            Salary FLOAT(8,2),
+            Salary varchar(255),
             PRIMARY KEY (ID)
             );
         '''
@@ -81,7 +81,7 @@ class Mysql:
             '{VirtualizationTech}',
             '{DataBaseTech}',
             STR_TO_DATE('{CreationDate}', '%Y-%m-%d'),
-            {Salary}
+            '{Salary}'
         );
         '''.format(
             ID=job['ID'],

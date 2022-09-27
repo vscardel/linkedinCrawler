@@ -10,7 +10,10 @@ def extract_company_name_and_url(soup: Any) -> tuple[str, str]:
         "span", class_="jobs-unified-top-card__company-name")
     # there is only one tag within the parent tag, and it is a link with company href and name
     # the first and last elements are '\n'
-    company_info_tag = tag_unified_job_title.contents[1]
+    try:
+        company_info_tag = tag_unified_job_title.contents[1]
+    except Exception as e:
+        print(e)
     company_name = str(company_info_tag.string).strip()
     company_link = Settings.URLS['LINKEDIN_DOMAIN'] + company_info_tag['href']
     return (company_name, company_link)
@@ -91,8 +94,8 @@ def extract_job_description(soup: Any) -> str:
             elif content.name == 'ul':
                 for li in content.contents:
                     description += f"{li.string}"
-        
-    return description
+    #if i do not remove the ' char i get an error of sql syntax
+    return description.replace("'",'')
 
 
 #the programming languages are going to be stored as a string
@@ -153,5 +156,4 @@ def extract_salary(soup:Any) -> str:
     if salary_tag:
         return str(salary_tag.string).strip()
     else:
-        return "A combinar"
-    
+        return 'Negociado'
