@@ -13,7 +13,7 @@ def extract_company_name_and_url(soup: Any) -> tuple[str, str]:
     try:
         company_info_tag = tag_unified_job_title.contents[1]
     except Exception as e:
-        print(e)
+        print('erro de extraçã do título')
     company_name = str(company_info_tag.string).strip()
     company_link = Settings.URLS['LINKEDIN_DOMAIN'] + company_info_tag['href']
     return (company_name, company_link)
@@ -74,7 +74,6 @@ def extract_job_location(soup: Any) -> str:
 
 
 def extract_job_description(soup: Any) -> str:
-    print('extraindo conteudo')
     tag_job_details = soup.find(
         "div", class_="jobs-box__html-content jobs-description-content__text t-14 t-normal jobs-description-content__text--stretch")
     # bad trick to not raise a "x has no attribute exception"

@@ -101,7 +101,6 @@ class Mysql:
             CreationDate=job['CreationDate'],
             Salary=job['Salary']
         )
-        print(insert_query)
         self.cursor.execute(insert_query)
         self.conn.commit()
 
