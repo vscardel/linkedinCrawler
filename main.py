@@ -8,16 +8,13 @@ from dotenv import dotenv_values
 
 if __name__ == '__main__':
     
-    opts, args = getopt.getopt(sys.argv[1:],'b:h',['batch_size=','headless='])
+    opts, args = getopt.getopt(sys.argv[1:],'b:',['batch_size='])
     
     batch_size = None
     headless = True
     for arg,arg_value in opts:
         if arg in ('b','--batch_size'):
             batch_size = int(arg_value)
-        elif arg in ('h','--headless'):
-            if arg_value.lower() == 'false':
-                headless = False
             
     print(f'initializing with --batch_size={batch_size}')
     if batch_size:
@@ -37,6 +34,8 @@ if __name__ == '__main__':
                 num_jobs = len(job_urls)
                 print(f'{num_jobs} urls were colected for extraction')
                 html_list = crawler.extract_html_from_jobs_urls(job_urls)
+                #selenium is no more necessary at this point
+                crawler.DRIVER.quit()
                 for html in html_list:
                     info_job = crawler.extract_content_from_html(html)
                     current_id = database_conn.generate_random_id()

@@ -36,8 +36,6 @@ class Crawler:
         chrome_options.add_argument(
             f'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
         chrome_options.add_argument("--no-sandbox")
-        if headless:
-            chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-crash-reporter")
         chrome_options.add_argument("--disable-extensions")
@@ -59,7 +57,7 @@ class Crawler:
             return True
         else:
             False
-
+        
     # scroll down the page the necessary number of times
     # to reveal all jobs urls
     def load_all_jobs(self, num_jobs: int) -> None:
@@ -70,7 +68,6 @@ class Crawler:
         # i can calculate the number of screen downs
         # i need to take
         num_scroll_downs = calculate_number_of_scroll_downs(num_jobs)
-        print(num_scroll_downs)
         for count in range(0, num_scroll_downs):
             # 20000 is a big enough number to scroll all the way down
             self.DRIVER.execute_script('window.scrollTo(0, 20000)')
