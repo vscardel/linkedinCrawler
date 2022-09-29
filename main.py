@@ -8,20 +8,24 @@ from dotenv import dotenv_values
 
 if __name__ == '__main__':
     
-    opts, args = getopt.getopt(sys.argv[1:],'b:',['batch_size='])
+    opts, args = getopt.getopt(sys.argv[1:],'b:h',['batch_size=','headless='])
     
     batch_size = None
+    headless = True
     for arg,arg_value in opts:
         if arg in ('b','--batch_size'):
             batch_size = int(arg_value)
-         
+        elif arg in ('h','--headless'):
+            if arg_value.lower() == 'false':
+                headless = False
+            
     print(f'initializing with --batch_size={batch_size}')
     if batch_size:
         config = dotenv_values(".env")
         username = config['USERNAME']
         password = config['PASSWORD']
         database_conn = Mysql()
-        crawler = Crawler()
+        crawler = Crawler(headless = headless)
         is_logged = crawler.login(username, password, crawler.DRIVER)
         if is_logged:
             crawler.load_all_jobs(batch_size)

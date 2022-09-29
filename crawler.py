@@ -27,7 +27,7 @@ def calculate_number_of_scroll_downs(number_of_jobs: int) -> int:
 
 class Crawler:
 
-    def __init__(self) -> None:
+    def __init__(self,headless = True) -> None:
         # initialize DRIVER and requests
         self.username: str = None
         self.password: str = None
@@ -36,7 +36,8 @@ class Crawler:
         chrome_options.add_argument(
             f'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
         chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--headless")
+        if headless:
+            chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-crash-reporter")
         chrome_options.add_argument("--disable-extensions")
@@ -45,7 +46,6 @@ class Crawler:
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--log-level=3")
         chrome_options.add_argument("--output=/dev/null")
-        chrome_options.add_argument('--headless')
         
         self.DRIVER = selenium.webdriver.Chrome(
             executable_path=os.getenv('EXECUTABLE_PATH'), options=chrome_options)
@@ -70,6 +70,7 @@ class Crawler:
         # i can calculate the number of screen downs
         # i need to take
         num_scroll_downs = calculate_number_of_scroll_downs(num_jobs)
+        print(num_scroll_downs)
         for count in range(0, num_scroll_downs):
             # 20000 is a big enough number to scroll all the way down
             self.DRIVER.execute_script('window.scrollTo(0, 20000)')
