@@ -1,4 +1,4 @@
-
+from pydoc import describe
 import selenium.webdriver
 import requests
 import os
@@ -27,7 +27,7 @@ def calculate_number_of_scroll_downs(number_of_jobs: int) -> int:
 
 class Crawler:
 
-    def __init__(self,headless = True) -> None:
+    def __init__(self, headless=True) -> None:
         # initialize DRIVER and requests
         self.username: str = None
         self.password: str = None
@@ -44,7 +44,7 @@ class Crawler:
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--log-level=3")
         chrome_options.add_argument("--output=/dev/null")
-        
+
         self.DRIVER = selenium.webdriver.Chrome(
             executable_path=os.getenv('EXECUTABLE_PATH'), options=chrome_options)
 
@@ -57,7 +57,7 @@ class Crawler:
             return True
         else:
             False
-        
+
     # scroll down the page the necessary number of times
     # to reveal all jobs urls
     def load_all_jobs(self, num_jobs: int) -> None:
@@ -101,28 +101,44 @@ class Crawler:
                 print(e)
         return html_content_list
 
+    def build_content_dict(self,content_key: str, content_dict: dict, extraction_function: Any, soup_object: Any = None, jobTitle: str = None, jobDescription:str = None):
+        try:
+            content_dict[content_key] = extraction_function(soup_object,jobTitle,jobDescription)
+        except Exception as e:
+            print(f'There was an error on the extraction of key {content_key}')
+            print('>>>>>>>>>>>>')
+            print(e)
+            content_dict[content_key] = ''
+
     def extract_content_from_html(self, html_content: str) -> dict:
         content_dict = {}
         soup = BeautifulSoup(html_content, 'html.parser')
-        company_name_and_link_tuple = extract_company_name_and_url(soup)
-        content_dict['CompanyName'] = company_name_and_link_tuple[0]
-        content_dict['CompanyLink'] = company_name_and_link_tuple[1]
-        content_dict['JobTitle'] = extract_job_title(soup)
-        content_dict['ApplicantExperience'] = extract_applicant_experience(
-            soup, content_dict['JobTitle'].lower())
-        content_dict['Domain'] = extract_domain(
-            soup, content_dict['JobTitle'].lower())
-        content_dict['CompanyService'] = extrac_company_service(soup)
-        content_dict['Location'] = extract_job_location(soup)
-        content_dict['Description'] = extract_job_description(soup)
-        content_dict['Modality'] = extract_modality(soup,content_dict['JobTitle'],content_dict['Description'])
-        content_dict['ProgrammingLanguage'] = extract_programming_language(content_dict['JobTitle'],content_dict['Description'])
-        frameworks,v_tech,d_tech = extract_description_content(content_dict['Description'])
+        self.build_content_dict('CompanyName',content_dict,extract_company_name,soup,None,None)
+        self.build_content_dict('CompanyLink',content_dict,extract_company_url,soup,None,None)
+        self.build_content_dict('JobTitle',content_dict,extract_job_title,soup,None,None)
+    
+        jobTitle = content_dict.get('JobTitle','')
+    
+        self.build_content_dict('Description',content_dict,extract_job_description,soup,None,None)
+        
+        Description = content_dict.get('Description','')
+            
+        self.build_content_dict('ApplicantExperience',content_dict,extract_applicant_experience,soup,jobTitle,None)
+        self.build_content_dict('Domain',content_dict,extract_domain,jobTitle,None)
+        self.build_content_dict('CompanyService',content_dict,extrac_company_service,soup,None,None)
+        self.build_content_dict('Location',content_dict,extract_job_location,soup,None,None)
+        self.build_content_dict('Modality',content_dict,extract_modality,None,jobTitle,Description)
+        self.build_content_dict('ProgrammingLanguage',content_dict,extract_programming_language,None,jobTitle,Description)
+        
+        frameworks, v_tech, d_tech = extract_description_content(soup,jobTitle,Description)
+        
+        #the only ones that are different for performance reasons 
         content_dict['Framework'] = frameworks
         content_dict['VirtualizationTech'] = v_tech
         content_dict['DataBaseTech'] = d_tech
-        content_dict['CreationDate'] = extract_date(soup)
-        content_dict['Salary'] = extract_salary(soup)
+            
+        self.build_content_dict('CreationDate',content_dict,extract_date,soup,None,None)
+        self.build_content_dict('Salary',content_dict,extract_salary,soup,None,None)
         return content_dict
 
     def __exit__(self):

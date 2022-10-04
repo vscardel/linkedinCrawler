@@ -4,29 +4,30 @@ from bs4 import BeautifulSoup,NavigableString,element
 from settings import Settings
 
 
-def extract_company_name_and_url(soup: Any) -> tuple[str, str]:
+def extract_company_name(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     # only one tag with this class name
     tag_unified_job_title = soup.find(
         "span", class_="jobs-unified-top-card__company-name")
     # there is only one tag within the parent tag, and it is a link with company href and name
     # the first and last elements are '\n'
-    try:
-        company_info_tag = tag_unified_job_title.contents[1]
-    except Exception as e:
-        print('erro de extraçã do título')
+    company_info_tag = tag_unified_job_title.contents[1]
     company_name = str(company_info_tag.string).strip()
+    return company_name
+
+def extract_company_url(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
+    tag_unified_job_title = soup.find(
+        "span", class_="jobs-unified-top-card__company-name")
+    company_info_tag = tag_unified_job_title.contents[1]
     company_link = Settings.URLS['LINKEDIN_DOMAIN'] + company_info_tag['href']
-    return (company_name, company_link)
+    return company_link
 
-
-def extract_job_title(soup: Any) -> str:
+def extract_job_title(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     tag_company_title = soup.find(
         "h2", "t-24 t-bold jobs-unified-top-card__job-title")
     company_title = str(tag_company_title.string.strip())
     return company_title
 
-
-def extract_applicant_experience(soup: Any, jobTitle) -> str:
+def extract_applicant_experience(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
 
     keywords = ['júnior', 'junior', 'pleno', 'sênior', 'senior']
 
@@ -46,8 +47,7 @@ def extract_applicant_experience(soup: Any, jobTitle) -> str:
 
     return "Pleno/Sênior"
 
-
-def extract_domain(soup: Any, jobTitle: str) -> str:
+def extract_domain(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     # this list can and will get more complete
     keywords = ['backend', 'back-end', 'frontend', 'front-end']
     for keyword in keywords:
@@ -59,21 +59,19 @@ def extract_domain(soup: Any, jobTitle: str) -> str:
     # default return
     return "Software Engineering"
 
-
 # two options, make an NLP approach or have a table
 # for companies with their services, for now i will
 # let this incomplete
-def extrac_company_service(soup: Any) -> None:
+def extrac_company_service(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> None:
     return None
 
+def extract_job_location(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
+    if soup:
+        tag_location = soup.find(
+            "span", class_="jobs-unified-top-card__bullet")
+        return str(tag_location.string).strip()
 
-def extract_job_location(soup: Any) -> str:
-    tag_location = soup.find(
-        "span", class_="jobs-unified-top-card__bullet")
-    return str(tag_location.string).strip()
-
-
-def extract_job_description(soup: Any) -> str:
+def extract_job_description(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     tag_job_details = soup.find(
         "div", class_="jobs-box__html-content jobs-description-content__text t-14 t-normal jobs-description-content__text--stretch")
     # bad trick to not raise a "x has no attribute exception"
@@ -96,10 +94,9 @@ def extract_job_description(soup: Any) -> str:
     #if i do not remove the ' char i get an error of sql syntax
     return description.replace("'",'')
 
-
 #the programming languages are going to be stored as a string
 #where each programming language is separated by a comma
-def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
+def extract_modality(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     # some jobs have a tag indicating its modality, but not all
     tag_modality = soup.find(
         "span", class_="jobs-unified-top-card__workplace-type")
@@ -113,7 +110,7 @@ def extract_modality(soup: Any, jobTitle: str, jobDescription: str) -> str:
 
 #programming languages are stored as a string with the PL separated by
 #a comma
-def extract_programming_language(jobTitle:str, jobDescription:str) -> str:
+def extract_programming_language(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     programming_languages_string = ''
     for programming_language in Settings.PROGRAMMING_LANGUAGES:
         if programming_language in jobTitle.lower() or programming_language in jobDescription.lower():
@@ -122,7 +119,7 @@ def extract_programming_language(jobTitle:str, jobDescription:str) -> str:
     programming_languages_string = programming_languages_string[:-1]
     return programming_languages_string
 
-def extract_description_content(jobDescription:str) -> Tuple[str,str,str]:
+def extract_description_content(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> Tuple[str,str,str]:
     framework_string = ''
     virtualization_tech_string = ''
     database_tech_string = ''
@@ -142,11 +139,11 @@ def extract_description_content(jobDescription:str) -> Tuple[str,str,str]:
     database_tech_string = database_tech_string[:-1]
     return framework_string,virtualization_tech_string,database_tech_string
 
-def extract_date(soup:Any) -> str:
+def extract_date(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     date_tag = soup.find("time")
     return str(date_tag['datetime'])
 
-def extract_salary(soup:Any) -> str:
+def extract_salary(soup: Any = None, jobTitle:str = None, jobDescription: str = None) -> str:
     tag_salary = soup.find("div", id="SALARY")
     salary_tag = None
     for content in tag_salary.contents:
